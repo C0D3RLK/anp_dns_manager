@@ -29,8 +29,8 @@ Tested Environment:
 <ul>
   <li>Developed and tested on 
     <ul>
-      <li>UBUNTU 23.0.4 </li>
-      <li>Docker</li>
+      <li>Ubuntu 22.04.2</li>
+      <li>Docker version 24.0.7, build afdd53b</li>
     </ul>
   </li>
   
