@@ -79,3 +79,12 @@ System Directories:<p>
   1.) Create your subdomain in Cloudflare<br>
   2.) Create the same subdomain in ANP-DNS-Manager<br>
   3.) The system will automatically monitor for changes and update the domain with your network IP.<br>
+
+
+<h1>Backend Explained:</h1><br>
+The system purely uses our own cloud server and Cloudflare to retrieve your dynamic network public ip.<p>
+<br>
+<strong>Data Privacy: </strong></p>
+</br>
+
+On that note just to keep a track of our repo, and the system availability your dockerized system will make a call back to our server with your email and domain in the encrypted format of MD5, So dont worry we still wont know your email or domain. It's purely for your safe keeping, we only need this encrypted strings for our server usage statistics.
