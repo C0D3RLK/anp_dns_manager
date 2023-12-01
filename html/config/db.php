@@ -315,7 +315,7 @@ class DB_COMM extends GENERAL_CONFIGURATION{
       id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       domain VARCHAR(50) NOT NULL,
       user_tag VARCHAR(200),
-      response tinytext NOT NULL,
+      response MEDIUMTEXT NOT NULL,
       response_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )";
 
