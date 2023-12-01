@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php_app
+    container_name: app
+    restart: unless-stopped
+    volumes:
+      - ./html:/var/www/html
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    image: nginx
+    container_name: nginx_webserver
+    restart: unless-stopped
+    ports:
+      - "8888:88"
+    volumes:
+      - ./html:/var/www/html
+      - ./nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: anp_dns
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: user_anp
+      MYSQL_PASSWORD: ca10a1c7511757913b66ea5da0179ee3
+      MYSQL_ROOT_PASSWORD: anp_dns_manag3r
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - './.mysql-data/db:/var/lib/mysql'
