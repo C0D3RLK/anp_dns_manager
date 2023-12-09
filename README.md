@@ -1,6 +1,9 @@
 # anp-dns-manager
 Manage Your Cloudflare Domains, Update Your Dynamic IP Automatically.
-
+</br>
+</br>
+<img class="col col-md rounded" src="https://home-wifi.kanthzone.com/public_api.php?token=df33a4141af9b8e0d9aab3f8b871900d&type=view" style="width:800px;"/>
+</br></br>
 <h1>Docker Version</h1>
 
 <h5>Version 1.0.0</h5>
@@ -36,7 +39,7 @@ Tested Environment:
   
 </ul>
 
-<h1>NOTE:</h1>
+<h1>Installation NOTE:</h1>
 
 The Composer comes with complete tools of
 <ul>
@@ -47,16 +50,27 @@ The Composer comes with complete tools of
 <br>
 Download this repo and run
 
-``` . install ```
+``` . install ``` 
 
 Once the installation is done open your browser and navigate to your system IP with port 8888.<p>
 Example: http://192.168.1.131:8888
+</br></br>
+<img class="col col-md rounded" src="https://home-wifi.kanthzone.com/public_api.php?token=db317d19dfdf18df88859ddcfc80c36f&type=view" style="width:500px;"/><p>
+You should get the installer screen
+</br></br>
+Just follow the steps to complete the installation. <p><b>Remember: You cannot change the domain name after installation.<br></br>
+Once the WUI has been installed you can immediately start using the ANP DNS Manager v1.</b><br>
+<p>
+<img class="col col-md rounded" src="https://home-wifi.kanthzone.com/public_api.php?token=4dfa4329627eaaaf3ec6ab11a171e665&type=view" style="width:800px;"/>
+</br>
+<b>Remember: When creating new domain, only insert the subdomain that you prefer and not the full domain.</b><p></br>
+Example: The subdomain that i want is <b>test-beta.example.com</b><p>
+On the DNS Manager i should only input <b>"test-beta"</b> on the sudbomain input box.
+<p></p><br></br>
+<hr>
 
-to initiate the installation.
-
-once the WUI has been installed you can immediately start using the ANP DNS Manager v1.
-
-System Directories:<p>
+<h4>System Directories:</h4><p>
+  
 ```
 -docker-compose.yml
 -Dockerfile
@@ -88,3 +102,4 @@ The system purely uses our own cloud server and Cloudflare to retrieve your dyna
 </br>
 
 On that note just to keep a track of our repo, and the system availability your dockerized system will make a call back to our server with your email and domain in the encrypted format of MD5, So dont worry we still wont know your email or domain. It's purely for your safe keeping, we only need this encrypted strings for our server usage statistics.
+
