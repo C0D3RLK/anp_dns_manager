@@ -3,22 +3,14 @@
 * @author kanth raj 86kanth@gmail.com
 * v1.0 27/nov/2023
 */
-// header('Content-Type: text/html; charset=utf-8');
+
 $LOCATION = strtolower(strtok($_SERVER['REQUEST_URI'],"?"));
-// var_dump($LOCATION);
+
 switch ($LOCATION) {
 
   case '/':
   require_once './app/verify.php';
   require_once './app/footer.php';
-  break;
-
-// Remove on prod
-  case '/lab':
-  if (file_exists("../microservices/".$_GET['call'].".php")) {
-    require_once '../microservices/'.$_GET['call'].".php";
-    break;
-  }
   break;
 
   case '/default':
