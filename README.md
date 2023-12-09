@@ -103,3 +103,10 @@ The system purely uses our own cloud server and Cloudflare to retrieve your dyna
 
 On that note just to keep a track of our repo, and the system availability your dockerized system will make a call back to our server with your email and domain in the encrypted format of MD5, So dont worry we still wont know your email or domain. It's purely for your safe keeping, we only need this encrypted strings for our server usage statistics.
 
+<br>
+<hr>
+<h1>Troubleshooting</h1>
+<br>
+By clicking on the button "Status" you will be able to see the recorded replies in the output like in below.<br>
+<img class="col col-md rounded" src="https://home-wifi.kanthzone.com/public_api.php?token=313fd744cdd2540c5271685a167711eb&type=view" style="width:500px;"/>
+
