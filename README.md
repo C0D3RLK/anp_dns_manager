@@ -1,8 +1,9 @@
 # anp-dns-manager
 Manage Your Cloudflare Domains, Update Your Dynamic IP Automatically.
 </br>
-</br>
+</br><center>
 <img class="col col-md rounded" src="https://home-wifi.kanthzone.com/public_api.php?token=df33a4141af9b8e0d9aab3f8b871900d&type=view" style="width:800px;"/>
+</center>
 </br></br>
 <h1>Docker Version</h1>
 
@@ -11,7 +12,7 @@ Service Compatability:
 <ul>
   <li>This Initial Version Supports 1 Domain Management For Now</li>
   <li>Backend API Supports Cloudflare API Version 4</li>
-  <li>Managing Domain Locally Only. This version not ready to manage Cloudflare subdomains for now. CREATING, UPDATING & DELETING in cloudflare must be done manually. </li>
+  <li>Managing Domain Locally Only. This version does not manage Cloudflare subdomains for now. CREATING, UPDATING & DELETING in cloudflare must be done manually. </li>
 </ul>
 
 The Tools:
@@ -84,8 +85,25 @@ On the DNS Manager i should only input <b>"test-beta"</b> on the sudbomain input
 <hr>
 <h1>Customizing Installation</h1>
 <p>
-  If you do not wish to use the PHP , MySQL or Nginx in the composer you may opt them</p>
-  <strong>Remember: It's not recomended to change the PHP container as it contains microservices that requires to run this web tool. </strong>
+  If you do not wish to use the MySQL or Nginx in the composer you may opt them</p>
+  <strong>Remember: It is not recomended to change the PHP container as it contains microservices that requires to run the backend tools. </strong>
+</br></br>
+However, you may use your own MySQL server.<p></p>
+By changing the DB parameters in the file
+
+```./html/config/db.php```
+<p></p>
+At the Line number 19 - 22<p>
+you may modify these lines according to your setup.<p>
+  
+```
+      define("SERVER", "Your DB server IP");
+      define('DB', 'Your Preferred Database Name');
+      define("DB_ID", "Your DB username");
+      define('DB_PWD', 'Your DB Passowrd');
+```
+</br>
+
 
   <hr>
   </br>
