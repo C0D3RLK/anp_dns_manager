@@ -128,3 +128,8 @@ On that note just to keep a track of our repo, and the system availability your 
 By clicking on the button "Status" you will be able to see the recorded replies in the output like in below.<br>
 <img class="col col-md rounded" src="https://home-wifi.kanthzone.com/public_api.php?token=313fd744cdd2540c5271685a167711eb&type=view" style="width:500px;"/>
 
+
+<hr>
+
+<h1>ARTICLE</h1>
+Read more about it's features and notes here: https://writings.kanthzone.com/dynamic-ip-and-dns-12b21e4ab045 
