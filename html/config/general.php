@@ -152,7 +152,8 @@ class GENERAL_CONFIGURATION{
   public function get_content_template(){
 
     $TEMPLATES = array(
-      "/home" => "./template/home_content.php"
+      "/home" => "./template/home_content.php",
+      "/error" => "./template/404.php"
     );
 
     return $TEMPLATES[$this::get_location()];
@@ -171,6 +172,12 @@ class GENERAL_CONFIGURATION{
       $_SESSION['U_TAG'] = md5($_SESSION['U_EMAIL']);
     }
     return $_SESSION['U_TAG'];
+  }
+
+  public function get_domain_info($ID){
+    $SQL = "subdomains WHERE id ='".$ID."'";
+    $DOMAIN_INFO = $this->gen_get_db_data($SQL,true)[0];
+    return $DOMAIN_INFO;
   }
 
   public function check_server_connectivity(){
