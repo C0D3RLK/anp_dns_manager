@@ -1,16 +1,16 @@
 <?php
 /*
 * @author kanth raj 86kanth@gmail.com
-* v1.0.0 Ms Dec 1,2023
+* v1.0.1 Ms Dec 1,2023
 */
 
-define("MODE","PROD");
+define("MODE","LAB");
 
 if (class_exists('GENERAL_CONFIGURATION')!=true) {
   if (MODE != "LAB") {
     require_once "/var/www/html/config/general.php";
   }else{
-    require_once "./config/general.php";
+    require_once "../html/config/general.php";
   }
 }
 
@@ -18,7 +18,7 @@ if (class_exists('DB_COMM')!=true) {
   if (MODE != "LAB") {
     require_once "/var/www/html/config/db.php";
   }else{
-    require_once "./config/db.php";
+    require_once "../html/config/db.php";
   }
 }
 
@@ -173,10 +173,10 @@ class ANP_DNS_MICROSRV extends DB_COMM{
     return $this->gen_get_db_data("users WHERE privileges = '0' ORDER by id ASC LIMIT 1",true)[0]['sys_key'];
   }
 
-  function get_users($CURRENT_IP){
+  public function get_users($CURRENT_IP){
     #get_user
     $USERS = $this->gen_get_db_data("users",true)[0];
-    $USER_DOMAIN = $this->gen_get_db_data("domains WHERE user_tag='".$USERS['user_tag']."'",true)[0];
+    $USER_DOMAIN = $this->gen_get_db_data("domains WHERE user_tag='".$USERS['user_tag']."' AND status = '1'",true)[0];
     $USER_DOMAIN_QUERY = "subdomains WHERE status ='1' && user_tag='".$USERS['user_tag']."'";
     $USER_SUBDOMAINS = $this->gen_get_db_data($USER_DOMAIN_QUERY,true);
     $SUBDOMAIN_DATA['cloudfapi'] = $USER_DOMAIN['cloudfapi'];
@@ -193,7 +193,11 @@ class ANP_DNS_MICROSRV extends DB_COMM{
     }
 
   }
-  
+
+  private function expire_pool_entry($ID){
+    $RUN_CMD = $this->update_db_data('new_entry_pool','status','1','id',$ID);
+  }
+
   public function check_ip_changes(){
     $GET_PREVIOUS_IP = $this->get_previous_ip();
     $PREVIOUS_IP  =($GET_PREVIOUS_IP == NULL)? "0.0.0.0":$GET_PREVIOUS_IP ;
@@ -207,6 +211,24 @@ class ANP_DNS_MICROSRV extends DB_COMM{
     return false;
   }
 
+  public function check_pool(){
+    $ENTRIES   = $this->gen_get_db_data("new_entry_pool","status = '0'");
+    $NEW_PIP   = $this::get_pip("IP","p_ip",$this->get_sys_key());
+
+    if ($ENTRIES != NULL) {
+      for ($i=0; $i < COUNT($ENTRIES); $i++) {
+        $USER_DATA    = $this->gen_get_db_data("domains","cloudfdomain = '".$ENTRIES[$i]['domain']."' AND user_tag = '".$ENTRIES[$i]['user_tag']."' AND status = '1'")[0];
+        $DOMAIN_SETTING = $this->gen_get_db_data("subdomains","user_tag='".$ENTRIES[$i]['user_tag']."' AND subdomain='".$ENTRIES[$i]['subdomain']."' AND status = '1'")[0]['proxy'];
+
+        #Perform force domain update
+        $this->expire_pool_entry($ENTRIES[$i]['id']);
+        $this->update_domain($ENTRIES[$i]['domain'],$USER_DATA['cloudfapi'],$USER_DATA['cloudfemail'],$ENTRIES[$i]['subdomain'],$DOMAIN_SETTING,$NEW_PIP,$ENTRIES[$i]['user_tag'],$ENTRIES[$i]['subdomain']);
+
+      }
+    }
+    return false;
+  }
+
 }
 
 $DNS_MAN = new ANP_DNS_MICROSRV();
@@ -215,4 +237,11 @@ if ($DNS_MAN->check_server_connectivity() == false) {
   $SERVER_STAT = $DNS_MAN->update_db_data('users','sys_key_status','0','privileges',"0",$REQ = true);
   exit;
 }
+#Pool 1
 $DNS_MAN->check_ip_changes();
+
+#Pool 2
+#Check pool for new entry
+#run update ip and set status to 1
+$DNS_MAN->check_pool();
+
