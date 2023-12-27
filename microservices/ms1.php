@@ -4,7 +4,7 @@
 * v1.0.1 Ms Dec 1,2023
 */
 
-define("MODE","LAB");
+define("MODE","PROD");
 
 if (class_exists('GENERAL_CONFIGURATION')!=true) {
   if (MODE != "LAB") {
