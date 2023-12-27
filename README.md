@@ -51,7 +51,7 @@ The Composer comes with complete tools of
 <br>
 Download this repo and run
 
-``` . install ``` 
+``` . install.sh ``` 
 
 Once the installation is done open your browser and navigate to your system IP with port 8888.<p>
 Example: http://192.168.1.131:8888
@@ -103,8 +103,8 @@ you may modify these lines according to your setup.<p>
       define('DB_PWD', 'Your DB Passowrd');
 ```
 </br>
-
-
+<b>Make sure you have created a database for it before begining the installation.</b>
+<br>
   <hr>
   </br>
   <h1>Usage Note:</h1><br>
