@@ -243,5 +243,5 @@ $DNS_MAN->check_ip_changes();
 #Pool 2
 #Check pool for new entry
 #run update ip and set status to 1
-$DNS_MAN->check_pool();
+//$DNS_MAN->check_pool();
 
