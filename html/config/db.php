@@ -1,8 +1,9 @@
 <?php
 /*
 * @author kanth raj 86kanth@gmail.com
-* v1.0 27/Nov/2023
+* v1.0.0 27/Nov/2023
 * DB Communication Class File
+* v1.0.1 12/9/23
 */
 class DB_COMM extends GENERAL_CONFIGURATION{
 
@@ -16,11 +17,21 @@ class DB_COMM extends GENERAL_CONFIGURATION{
 
   protected function db_detail(){
 
-      define("SERVER", "db");
+
+      define("SERVER", "localhost");
       define('DB', 'anp_dns');
-      define("DB_ID", "user_anp");
-      define('DB_PWD', 'ca10a1c7511757913b66ea5da0179ee3');
+      define("DB_ID", "anp_dns");
+      define('DB_PWD', 'b89493f92ecf22049940eec9217d5611');
       define('SESSION_TIME',"60"); //minutes
+
+    //   define('DB', 'anp_dns');
+    //   define("SERVER", "db");    // }
+    //   define("DB_ID", "anp_dns_manager_beta");
+    //   define('DB_PWD', 'ca10a1c7511757913b66ea5da0179ee3');
+    //   define('SESSION_TIME',"60"); //minutes
+    //
+
+
 
     //initialize php config
     $this->general_format();
@@ -131,6 +142,7 @@ class DB_COMM extends GENERAL_CONFIGURATION{
     if ($COLUMN == false) {
       $query = "UPDATE `".$TABLE."` SET ".$DATA." WHERE ".$IDENTIFIER." = '".$IDENTIFIER_VAL."'";
     }
+    
 
     if ($con->query($query) === TRUE ) {
       return true;
@@ -325,11 +337,21 @@ class DB_COMM extends GENERAL_CONFIGURATION{
       cloudfapi VARCHAR(200),
       cloudfdomain VARCHAR(50),
       cloudfemail VARCHAR(50),
+      status INT(1),
       response_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )";
 
+    $sql6 = "CREATE TABLE IF NOT EXISTS new_entry_pool (
+      id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      domain VARCHAR(100),
+      subdomain VARCHAR(100),
+      user_tag VARCHAR(200),
+      status int(1),
+      entry_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )";
 
-    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE && $conn->query($sql3) === TRUE && $conn->query($sql4) === TRUE && $conn->query($sql5) === TRUE) {
+
+    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE && $conn->query($sql3) === TRUE && $conn->query($sql4) === TRUE && $conn->query($sql5) === TRUE && $conn->query($sql6) === TRUE) {
 
       return true;
     } else {
