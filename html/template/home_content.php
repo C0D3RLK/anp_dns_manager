@@ -1,5 +1,22 @@
 <?php
 
+#force dns update
+
+if (isset($_POST) && array_search("a518f6f0b589d6e7dba07266d3b27981",$_POST)==true) {
+
+  $UPDATE_DATA = $_POST;
+  $UPDATE_DATA_ID = $_POST[array_keys($UPDATE_DATA)[1]];
+  $DNS_MAN::set_alert('info', "Success!", $INFO = " Subdomain <b>Update</b> Sent Successfully.  <small>It will take a minute for changes to take effect.</small>" );
+
+  $DOMAIN_INFO = $DNS_MAN->get_domain_info(base64_decode($UPDATE_DATA_ID));
+
+  #update pool
+  $POOL_DATA = "'".$_SESSION['U_CLOUDFD_DOMAIN']."','".$DOMAIN_INFO['subdomain']."','".$DNS_MAN::get_user_tag()."','0'";
+  $POOL_COL  = "domain,subdomain,user_tag,status";
+  $DNS_MAN->create_entry('new_entry_pool',$POOL_COL,$POOL_DATA);
+
+}
+
 
 #save user details
 
@@ -139,8 +156,14 @@ if (isset($_POST) && array_search("d97bf40cb6dd3a6e1414ac287f240c6b",$_POST)==tr
   $ENABLE_DNS_ID = $_POST[array_keys($ENABLE_DNS)[1]];
 
   $DNS_MAN->update_db_data('subdomains','status','1','id',base64_decode($ENABLE_DNS_ID),true);
-
   $DNS_MAN::set_alert('success', "Success!", $INFO = " Subdomain <b>Enabled</b> Successfully." );
+
+  $DOMAIN_INFO = $DNS_MAN->get_domain_info(base64_decode($ENABLE_DNS_ID));
+
+  #update pool
+  $POOL_DATA = "'".$_SESSION['U_CLOUDFD_DOMAIN']."','".$DOMAIN_INFO['subdomain']."','".$DNS_MAN::get_user_tag()."','0'";
+  $POOL_COL  = "domain,subdomain,user_tag,status";
+  $DNS_MAN->create_entry('new_entry_pool',$POOL_COL,$POOL_DATA);
 
 }
 
@@ -148,10 +171,6 @@ if (isset($_POST) && array_search("d97bf40cb6dd3a6e1414ac287f240c6b",$_POST)==tr
 #list all dns
 $DNS_DATA = $DNS_MAN->gen_get_db_data('subdomains',true);
 
-// var_dump($DNS_DATA);
-if ($DNS_DATA == NULL) {
-  // $DNS_DATA['test']=0;
-}
 ?>
 
 
@@ -176,6 +195,15 @@ function dns_enable_confirm(RN,VAL){
   $('#dns_process_enable').text(VAL);
   $('#dns_enable_btn').attr('onclick','dns_enable_confirm("'+RN+'","ENABLE");');
 }  // 2404d906cee8c7ecd1e1be9a4eb9afe3
+
+function dns_update_confirm(RN,VAL){
+  if(VAL == 'UPDATE') { $("#frm_update_dns"+RN).submit(); }
+  $('#update_dns_modal').modal('show');
+  $('#dns_process_update').text(VAL);
+  $('#dns_update_btn').attr('onclick','dns_update_confirm("'+RN+'","UPDATE");');
+}  // a518f6f0b589d6e7dba07266d3b27981
+
+
 </script>
 
 <form id="edit_form" class="hidden" action="/home" method="post">
@@ -274,7 +302,22 @@ function dns_enable_confirm(RN,VAL){
                 </form>
                 <button data-toggle="tooltip" data-placement="top" title="Remove" onclick="dns_del_confirm('<?php echo $i ?>','<?php echo $DNS_DATA[$i]['name']; ?>');" class="btn btn-danger btn-sm" title="Remove" data-toggle="tooltip" data-placement="right" ><i class="fas fa-times"></i></button>
               </li>
-              <li class="list-inline-item"> <button id="<?php echo $i; ?>" onclick="show_status(this.id,'graphic');" data-toggle="tooltip" data-placement="top" title="Status" type="button" class="btn btn-primary btn-sm" name="button"> <i class="fa-solid fa-clock-rotate-left"></i></button></li>
+
+            </ul>
+            <ul class="list-inline ">
+              <?php  if ($DNS_DATA[$i]['status'] == 1): ?>
+                <li  class="list-inline-item">
+                  <form  id="frm_update_dns<?php echo $i ?>" name="frm_update_dns<?php echo $i ?>" action="<?php echo "/home"; ?>" method="post" >
+                    <!-- <button title="enable" data-toggle="tooltip" data-placement="top" class="btn btn-sm"><i class="fas fa-step-forward text-info"></i></button> -->
+                    <input type="text" name="REQUEST_R<?php echo $i ?>" value="<?php echo md5(base64_encode('UPDATE_DNS')); ?>" hidden>
+                    <input type="text" name="rsm_data_tag<?php echo $i ?>" value="<?php echo base64_encode($DNS_DATA[$i]['id']); ?>" hidden>
+                  </form>
+                  <button data-toggle="tooltip" data-placement="bottom" title="Update" onclick="dns_update_confirm('<?php echo $i ?>','<?php echo $DNS_DATA[$i]['name']; ?>');" type="button" name="button" class="btn btn-sm btn-info">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                  </button>
+                </li>
+              <?php endif; ?>
+              <li class="list-inline-item"> <button id="<?php echo $i; ?>" onclick="show_status(this.id,'graphic');" data-toggle="tooltip" data-placement="bottom" title="Status" type="button" class="btn btn-primary btn-sm" name="button"> <i class="fa-solid fa-clock-rotate-left"></i></button></li>
             </ul>
 
 
@@ -582,6 +625,41 @@ $("#alert_msg").fadeTo(2000, 500).slideUp(500, function(){
 
 <!-- dnsTAB SECTION ENDS -->
 
+
+
+<!-- udpoate Modal -->
+
+
+
+<!-- The Modal -->
+<div id="update_dns_modal" class="modal fade" >
+  <div class="modal-dialog ">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"><i class="fas text-info fa-sync"></i> Update DNS?</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>Are you sure ? <br>This will Update this DNS <strong>(<label id="dns_process_update"></label>)</strong> Record.</p>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer bg-dark" >
+        <small class="text-warning">We do not recommend a frequest update to avoid your API key from reaching usage limit. Do this onyl when necessary.</small>
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button id="dns_update_btn" type="button" onclick="" class="btn btn-success" data-dismiss="modal" title="Update" data-toggle="tooltip" data-placement="top"><i class="far fa-check-circle"></i></button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- dnsTAB SECTION ENDS -->
 
 
 <!-- DNS History Modal Starts -->
