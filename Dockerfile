@@ -17,6 +17,7 @@ RUN apk add busybox-initscripts openrc --no-cache
 
 
 RUN echo '*/30 * * * *  /usr/local/bin/php /home/www/microservices/ms1.php' >>  /etc/crontabs/root
+RUN echo '*/1 * * * *  /usr/local/bin/php /home/www/microservices/ms2.php' >>  /etc/crontabs/root
 
 RUN rc-update add crond default
 
