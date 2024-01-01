@@ -18,10 +18,10 @@ class DB_COMM extends GENERAL_CONFIGURATION{
   protected function db_detail(){
 
 
-      define("SERVER", "localhost");
+       define("SERVER", "db");
       define('DB', 'anp_dns');
-      define("DB_ID", "anp_dns");
-      define('DB_PWD', 'b89493f92ecf22049940eec9217d5611');
+      define("DB_ID", "user_anp");
+      define('DB_PWD', 'ca10a1c7511757913b66ea5da0179ee3');
       define('SESSION_TIME',"60"); //minutes
 
     //   define('DB', 'anp_dns');
