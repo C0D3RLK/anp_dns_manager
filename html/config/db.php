@@ -1,8 +1,9 @@
 <?php
 /*
 * @author kanth raj 86kanth@gmail.com
-* v1.0 27/Nov/2023
+* v1.0.0 27/Nov/2023
 * DB Communication Class File
+* v1.0.1 12/9/23
 */
 class DB_COMM extends GENERAL_CONFIGURATION{
 
@@ -16,12 +17,12 @@ class DB_COMM extends GENERAL_CONFIGURATION{
 
   protected function db_detail(){
 
-      define("SERVER", "db");
+      define("SERVER", "135.13.75.60");
       define('DB', 'anp_dns');
-      define("DB_ID", "user_anp");
+      define("DB_ID", "dns_manager");
       define('DB_PWD', 'ca10a1c7511757913b66ea5da0179ee3');
       define('SESSION_TIME',"60"); //minutes
-
+    
     //initialize php config
     $this->general_format();
 
@@ -38,6 +39,7 @@ class DB_COMM extends GENERAL_CONFIGURATION{
 
   public function gen_get_db_data($TABLE_NICK,$REQ){
     //GENERAL database data reader
+
     $DB_DATA = $this->db_detail();
     $con = new mysqli($this->reader($DB_DATA,'SERVER'), $this->reader($DB_DATA,'DB_ID'), $this->reader($DB_DATA,'DB_PWD'), $this->reader($DB_DATA,'DB'));
     #Check db connection
@@ -52,7 +54,6 @@ class DB_COMM extends GENERAL_CONFIGURATION{
     if($TABLE_NICK == false){
       $sql = $REQ;
     }
-    // var_dump($sql);
     $result = $con->query($sql);
 
     if ($result->num_rows > 0) {
@@ -131,6 +132,7 @@ class DB_COMM extends GENERAL_CONFIGURATION{
     if ($COLUMN == false) {
       $query = "UPDATE `".$TABLE."` SET ".$DATA." WHERE ".$IDENTIFIER." = '".$IDENTIFIER_VAL."'";
     }
+    
 
     if ($con->query($query) === TRUE ) {
       return true;
@@ -315,7 +317,7 @@ class DB_COMM extends GENERAL_CONFIGURATION{
       id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       domain VARCHAR(50) NOT NULL,
       user_tag VARCHAR(200),
-      response tinytext NOT NULL,
+      response MEDIUMTEXT NOT NULL,
       response_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )";
 
@@ -329,8 +331,17 @@ class DB_COMM extends GENERAL_CONFIGURATION{
       response_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )";
 
+    $sql6 = "CREATE TABLE IF NOT EXISTS new_entry_pool (
+      id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      domain VARCHAR(100),
+      subdomain VARCHAR(100),
+      user_tag VARCHAR(200),
+      status int(1),
+      entry_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )";
 
-    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE && $conn->query($sql3) === TRUE && $conn->query($sql4) === TRUE && $conn->query($sql5) === TRUE) {
+
+    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE && $conn->query($sql3) === TRUE && $conn->query($sql4) === TRUE && $conn->query($sql5) === TRUE && $conn->query($sql6) === TRUE) {
 
       return true;
     } else {
