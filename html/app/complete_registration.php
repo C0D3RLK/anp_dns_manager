@@ -39,8 +39,8 @@ if ($DNS_MAN->gen_check_db_data(false,"SELECT * FROM users") == true){
   $COLUMN_USER = "name,password,email,user_tag,privileges,sys_key,sys_key_status";
   $DATA_USER = "'".$_POST['name']."','".$FILTER_PASS."','".$_POST['email']."','".$USER_TAG."','0','".$GET_SYS_KEY['key']."','1'";
 
-  $COLUMN_DOMAIN = "user_tag,cloudfapi,cloudfdomain,cloudfemail";
-  $DATA_DOMAIN = "'".$USER_TAG."','".$_POST['cloudfapi']."','".$_POST['cloudfdomain']."','".$_POST['cloudfemail']."'";
+  $COLUMN_DOMAIN = "user_tag,cloudfapi,cloudfdomain,cloudfemail,status";
+  $DATA_DOMAIN = "'".$USER_TAG."','".$_POST['cloudfapi']."','".$_POST['cloudfdomain']."','".$_POST['cloudfemail']."','1'";
 
   if($DNS_MAN->create_entry('users',$COLUMN_USER,$DATA_USER) && $DNS_MAN->create_entry('domains',$COLUMN_DOMAIN,$DATA_DOMAIN)){
     $DNS_MAN->redirect_route('login?status=202-Reg-Install');
