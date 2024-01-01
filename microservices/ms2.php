@@ -1,10 +1,10 @@
 <?php
 /*
 * @author kanth raj 86kanth@gmail.com
-* v1.0.0 Ms2 Dec 27,2023
+* v1.0.1 Ms Dec 1,2023
 */
 
-define("MODE","PROD");
+define("MODE","LAB");
 
 if (class_exists('GENERAL_CONFIGURATION')!=true) {
   if (MODE != "LAB") {
@@ -219,10 +219,10 @@ class ANP_DNS_MICROSRV extends DB_COMM{
       for ($i=0; $i < COUNT($ENTRIES); $i++) {
         $USER_DATA    = $this->gen_get_db_data("domains","cloudfdomain = '".$ENTRIES[$i]['domain']."' AND user_tag = '".$ENTRIES[$i]['user_tag']."' AND status = '1'")[0];
         $DOMAIN_SETTING = $this->gen_get_db_data("subdomains","user_tag='".$ENTRIES[$i]['user_tag']."' AND subdomain='".$ENTRIES[$i]['subdomain']."' AND status = '1'")[0]['proxy'];
-
+        $FULL_DOMAIN = $ENTRIES[$i]['subdomain'].".".$ENTRIES[$i]['domain'];
         #Perform force domain update
         $this->expire_pool_entry($ENTRIES[$i]['id']);
-        $this->update_domain($ENTRIES[$i]['domain'],$USER_DATA['cloudfapi'],$USER_DATA['cloudfemail'],$ENTRIES[$i]['subdomain'],$DOMAIN_SETTING,$NEW_PIP,$ENTRIES[$i]['user_tag'],$ENTRIES[$i]['subdomain']);
+        $this->update_domain($ENTRIES[$i]['domain'],$USER_DATA['cloudfapi'],$USER_DATA['cloudfemail'],$FULL_DOMAIN,$DOMAIN_SETTING,$NEW_PIP,$ENTRIES[$i]['user_tag'],$ENTRIES[$i]['subdomain']);
 
       }
     }
