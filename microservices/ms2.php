@@ -125,6 +125,8 @@ class ANP_DNS_MICROSRV extends DB_COMM{
     $old_ip = $json['result']['0']['content'];
 
     if ($old_ip === $ip) {
+      #updated JAN 3rd,2024
+      $this->update_tracker($user_tag,$user_subdomain,"Up-Todate, No PIP Change");
       #Do nothing
     }
     else {
