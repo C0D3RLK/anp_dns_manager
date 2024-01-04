@@ -776,7 +776,7 @@ $( document ).ready(function() {
 
       <!-- Modal footer -->
       <div class="modal-footer bg-dark" >
-        <small class="text-warning">We do not recommend a frequest update to avoid your API key from reaching usage limit. Do this onyl when necessary.</small>
+        <small class="text-warning">We do not recommend a frequent update to avoid your API key from reaching usage limit. Do this onyl when necessary.</small>
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
         <button id="dns_update_btn" type="button" onclick="" class="btn btn-success" data-dismiss="modal" title="Update" data-toggle="tooltip" data-placement="top"><i class="far fa-check-circle"></i></button>
 
