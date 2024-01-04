@@ -113,6 +113,17 @@ you may modify these lines according to your setup.<p>
   3.) The system will automatically monitor for changes and update the domain with your network IP.<br>
 
 
+<h1>ADDED FEATURES</h1>
+Jan 4, 2024</br>
+Added feature, to temporarily disable auto update when Enabling subdomain.
+ </br>
+--Users can now add domains into list and enable without the system needing to update IP immediately.</br>
+--Useful for scenario when Cloudflare IP is already update, user only wants to add new domain to monitor.</br>
+--Domain list sorted from new to old. [Hardcoded]. (filter will available on next update)</br>
+</br>
+Feature available in the Settings.
+
+</br>
 <h1>Backend Explained:</h1><br>
 The system purely uses our own cloud server and Cloudflare to retrieve your dynamic network public ip.<p>
 <br>
