@@ -1,4 +1,18 @@
 <?php
+//Jan 4 2024
+
+#prevent push on enable
+if (isset($_POST['no_auto_push']) && $_POST['no_auto_push'] == 'false') {
+  $_SESSION['no_auto_push'] = false;
+}
+if (isset($_POST['no_auto_push']) && $_POST['no_auto_push'] == 'true') {
+  $_SESSION['no_auto_push'] = true;
+}
+
+if (!isset($_SESSION['no_auto_push'])) {
+  $_SESSION['no_auto_push'] = false;
+}
+
 
 #force dns update
 
@@ -15,8 +29,8 @@ if (isset($_POST) && array_search("a518f6f0b589d6e7dba07266d3b27981",$_POST)==tr
   $POOL_COL  = "domain,subdomain,user_tag,status";
   $DNS_MAN->create_entry('new_entry_pool',$POOL_COL,$POOL_DATA);
 
-}
 
+}
 
 #save user details
 
@@ -161,18 +175,97 @@ if (isset($_POST) && array_search("d97bf40cb6dd3a6e1414ac287f240c6b",$_POST)==tr
   $DOMAIN_INFO = $DNS_MAN->get_domain_info(base64_decode($ENABLE_DNS_ID));
 
   #update pool
-  $POOL_DATA = "'".$_SESSION['U_CLOUDFD_DOMAIN']."','".$DOMAIN_INFO['subdomain']."','".$DNS_MAN::get_user_tag()."','0'";
-  $POOL_COL  = "domain,subdomain,user_tag,status";
-  $DNS_MAN->create_entry('new_entry_pool',$POOL_COL,$POOL_DATA);
+  if (  $_SESSION['no_auto_push'] == false) {
+    $POOL_DATA = "'".$_SESSION['U_CLOUDFD_DOMAIN']."','".$DOMAIN_INFO['subdomain']."','".$DNS_MAN::get_user_tag()."','0'";
+    $POOL_COL  = "domain,subdomain,user_tag,status";
+    $DNS_MAN->create_entry('new_entry_pool',$POOL_COL,$POOL_DATA);
+  }
 
 }
 
 
 #list all dns
-$DNS_DATA = $DNS_MAN->gen_get_db_data('subdomains',true);
+#without sorting list new to old
+//$DNS_DATA = $DNS_MAN->gen_get_db_data('subdomains',true);
 
+#with sorting list new to old
+$DNS_DATA = $DNS_MAN->gen_get_db_data('subdomains',"id > 0 Order by id DESC");
 ?>
 
+<style media="screen">
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #334254;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #334254;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.toast-location{
+  position: absolute;
+  top: 0;
+  right:0;
+  /* zIndex: -100; */
+  float: right;
+  top: 5vw;
+  right: 1vw;
+}
+</style>
 
 
 
@@ -205,6 +298,7 @@ function dns_update_confirm(RN,VAL){
 
 
 </script>
+
 
 <form id="edit_form" class="hidden" action="/home" method="post">
 </form>
@@ -331,6 +425,10 @@ function dns_update_confirm(RN,VAL){
 </div>
 
 <small>Note: Newly added domains needs to be enabled, for it to run.</small>
+
+
+<form class="hidden" id="open_form">
+</form>
 
 
 <script type="text/javascript">
@@ -545,6 +643,35 @@ $("#alert_msg").fadeTo(2000, 500).slideUp(500, function(){
   $("#alert_msg").slideUp(500);
 });
 
+
+function auto_update_change(REQ){
+
+  CURRENT_STATE = "<?php echo $_SESSION['no_auto_push']; ?>";
+  SET_STATE = true;
+  if (REQ == "CR") {
+    if (CURRENT_STATE == "1"){ SET_STATE = false;}
+    $('<input>').attr({
+      type: 'text',
+      hidden: 'true',
+      class: "form-control",
+      id: "no_auto_push",
+      name: "no_auto_push",
+      value: SET_STATE
+    }).appendTo('#open_form');
+    $('#open_form').attr('method','post');
+    $('#open_form').attr('action','/home');
+    $('#open_form').submit();
+
+  }
+}
+
+
+$( document ).ready(function() {
+  if ("<?php echo $_SESSION['no_auto_push']; ?>" == "1") {
+    $('#auto_push_state_btn').prop('checked',true);
+    $('#auto_push_alert').toast('show');
+  }
+});
 </script>
 
 
@@ -759,6 +886,14 @@ $("#alert_msg").fadeTo(2000, 500).slideUp(500, function(){
           <small>Leave empty if not changing password.</small><br>
 
         </form>
+        <hr>
+        <label class="text-primary" for=""><strong>No Auto Update</strong></label><br>
+        <!-- Rounded switch -->
+        <label   class="switch">
+          <input onchange="auto_update_change('CR');" id="auto_push_state_btn"  type="checkbox">
+          <span class="slider round"></span>
+        </label>
+        <label class="text-bolder" for=""> <small class="text-info">Enable domains without auto-updates.</small> </label>
 
       </div>
       <!-- Modal footer -->
@@ -773,3 +908,15 @@ $("#alert_msg").fadeTo(2000, 500).slideUp(500, function(){
 
 </div>
 <!-- User Details Modal Ends -->
+
+
+
+<div id="auto_push_alert" class="toast toast-location" data-autohide="false">
+  <div class="toast-header">
+    <strong class="mr-auto text-info">Alert</strong>
+    <!-- <small class="text-muted">5 mins ago</small> -->
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+  </div>
+  <div class="toast-body">
+    <label class="text-danger">Auto-update disabled;</label> <br>Domains won't refresh automatically when enable. Require manual update or auto-refresh on IP change.  </div>
+  </div>
