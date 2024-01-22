@@ -1,5 +1,5 @@
 <?php
-//Jan 4 2024
+//Jan 22,2024
 
 #prevent push on enable
 if (isset($_POST['no_auto_push']) && $_POST['no_auto_push'] == 'false') {
@@ -798,7 +798,7 @@ $( document ).ready(function() {
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title"><i class="fa-solid fa-clock-rotate-left text-info"></i> Domain Update History</h4>
+        <h4 class="modal-title"><i class="fa-solid fa-clock-rotate-left text-info"></i> Domain Update Records</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -909,6 +909,65 @@ $( document ).ready(function() {
 </div>
 <!-- User Details Modal Ends -->
 
+
+
+<!-- PIP History modal Starts -->
+
+<!-- The Modal -->
+<div class="modal fade" id="ip_records">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-history text-primary"></i> IP Records</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <pre>
+          <code id="ipdata">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Previous</th>
+                  <th>Current</th>
+                  <th>Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <?php #You can add like a filter to the value of "10" to retrieve more
+                $PIP_DATA =  json_decode(json_encode($DNS_MAN->gen_get_db_data('ip_history',"id > 0 Order by id DESC LIMIT 10")),true);
+                for ($i=0; $i < COUNT($PIP_DATA) ; $i++) : ?>
+
+                <tr>
+                  <td><?php echo $i+1; ?></td>
+                  <td><?php echo $PIP_DATA[$i]['current']; ?></td>
+                  <td><?php echo $PIP_DATA[$i]['previous']; ?></td>
+                  <td><?php echo $PIP_DATA[$i]['change_stamp']; ?></td>
+                </tr>
+
+              <?php endfor; ?>
+            </tbody>
+          </table>
+        </code>
+      </pre>
+      <small>Last 10 Records.</small>
+    </div>
+    <!-- Modal footer -->
+    <div class="modal-footer bg-dark">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+
+  </div>
+</div>
+</div>
+
+</div>
+<!-- PIP History modal Ends -->
 
 
 <div id="auto_push_alert" class="toast toast-location" data-autohide="false">
