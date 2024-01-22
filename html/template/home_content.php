@@ -1,5 +1,6 @@
 <?php
-//Jan 22,2024
+
+//JAN 22,2024
 
 #prevent push on enable
 if (isset($_POST['no_auto_push']) && $_POST['no_auto_push'] == 'false') {
@@ -932,8 +933,8 @@ $( document ).ready(function() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Previous</th>
-                  <th>Current</th>
+                  <th>From</th>
+                  <th>To</th>
                   <th>Updated</th>
                 </tr>
               </thead>
