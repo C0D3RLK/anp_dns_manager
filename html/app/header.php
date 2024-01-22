@@ -42,8 +42,11 @@
       <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#user_info" href="#"><i class="fa-solid fa-user-gear"></i></a>
       </li>
+      <li  class="nav-item">
+        <a  class="nav-link" data-toggle="modal" data-target="#ip_records" href="#"><i class="fas fa-history"></i></a>
+      </li>
       <li class="nav-item">
-        <a class="nav-link" href="/logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+        <a title="IP Records" class="nav-link" href="/logout"><i class="fa-solid fa-right-from-bracket"></i></a>
       </li>
     </ul>
   </div>
