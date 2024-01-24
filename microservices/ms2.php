@@ -2,6 +2,7 @@
 /*
 * @author kanth raj 86kanth@gmail.com
 * v1.0.1 Ms Dec 1,2023
+* 1.0.2 MS2 Jan 24, 2024 - PIP server load fix
 */
 
 define("MODE","PROD");
@@ -215,9 +216,10 @@ class ANP_DNS_MICROSRV extends DB_COMM{
 
   public function check_pool(){
     $ENTRIES   = $this->gen_get_db_data("new_entry_pool","status = '0'");
-    $NEW_PIP   = $this::get_pip("IP","p_ip",$this->get_sys_key());
 
     if ($ENTRIES != NULL) {
+      #Fix to prevent server load only checks IP when there's request entry
+      $NEW_PIP   = $this::get_pip("IP","p_ip",$this->get_sys_key());
       for ($i=0; $i < COUNT($ENTRIES); $i++) {
         $USER_DATA    = $this->gen_get_db_data("domains","cloudfdomain = '".$ENTRIES[$i]['domain']."' AND user_tag = '".$ENTRIES[$i]['user_tag']."' AND status = '1'")[0];
         $DOMAIN_SETTING = $this->gen_get_db_data("subdomains","user_tag='".$ENTRIES[$i]['user_tag']."' AND subdomain='".$ENTRIES[$i]['subdomain']."' AND status = '1'")[0]['proxy'];
