@@ -216,6 +216,7 @@ class ANP_DNS_MICROSRV extends DB_COMM{
       $SERVER_STAT = $this->update_db_data('users','sys_key_status','0','privileges',"0",$REQ = true);
       return false;
     }
+    return true;
   }
 
   public function check_pool(){
