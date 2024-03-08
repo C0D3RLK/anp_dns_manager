@@ -219,7 +219,7 @@ class ANP_DNS_MICROSRV extends DB_COMM{
 
     if ($ENTRIES != NULL) {
       #Fix to prevent server load only checks IP when there's request entry
-      if ($DNS_MAN->check_server_connectivity() == false) {
+      if ($this->check_server_connectivity() == false) {
         $SERVER_STAT = $DNS_MAN->update_db_data('users','sys_key_status','0','privileges',"0",$REQ = true);
         exit;
       }
