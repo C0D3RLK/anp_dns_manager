@@ -219,6 +219,10 @@ class ANP_DNS_MICROSRV extends DB_COMM{
 
     if ($ENTRIES != NULL) {
       #Fix to prevent server load only checks IP when there's request entry
+      if ($DNS_MAN->check_server_connectivity() == false) {
+        $SERVER_STAT = $DNS_MAN->update_db_data('users','sys_key_status','0','privileges',"0",$REQ = true);
+        exit;
+      }
       $NEW_PIP   = $this::get_pip("IP","p_ip",$this->get_sys_key());
       for ($i=0; $i < COUNT($ENTRIES); $i++) {
         $USER_DATA    = $this->gen_get_db_data("domains","cloudfdomain = '".$ENTRIES[$i]['domain']."' AND user_tag = '".$ENTRIES[$i]['user_tag']."' AND status = '1'")[0];
@@ -237,10 +241,10 @@ class ANP_DNS_MICROSRV extends DB_COMM{
 
 $DNS_MAN = new ANP_DNS_MICROSRV();
 $DNS_MAN->GENERAL_VARIABLES();
-if ($DNS_MAN->check_server_connectivity() == false) {
-  $SERVER_STAT = $DNS_MAN->update_db_data('users','sys_key_status','0','privileges',"0",$REQ = true);
-  exit;
-}
+//if ($DNS_MAN->check_server_connectivity() == false) {
+  //$SERVER_STAT = $DNS_MAN->update_db_data('users','sys_key_status','0','privileges',"0",$REQ = true);
+  //exit;
+//}
 #Pool 1
 // $DNS_MAN->check_ip_changes();
 
