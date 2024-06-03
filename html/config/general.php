@@ -33,8 +33,8 @@ class GENERAL_CONFIGURATION{
     curl_setopt($curl, CURLINFO_HEADER_OUT, $headers);
 
     //for debug only!
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
     $OUTPUT = curl_exec($curl);
     curl_close($curl);
