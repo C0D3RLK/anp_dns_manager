@@ -35,6 +35,8 @@ Tested Environment:
     <ul>
       <li>Ubuntu 22.04.2</li>
       <li>Docker version 24.0.7, build afdd53b</li>
+      <li>Raspberry Pi 4</li>
+      <li>Raspberry OS: Bullseye & Bookworm </li>
     </ul>
   </li>
   
