@@ -80,6 +80,9 @@ On the DNS Manager i should only input <b>"test-beta"</b> on the sudbomain input
 -Dockerfile_nginx
 -html/
 -nginx/
+-microservices/
+   -ms1.php
+   -ms2.php
 -entrypoint/
    -services.sh
 ```
